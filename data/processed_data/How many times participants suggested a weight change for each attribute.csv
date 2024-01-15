@@ -1,0 +1,48 @@
+,attribute,Total_Weight_Changes,Number of participants clicked
+0,Age,117,44
+1,Income,98,39
+2,Years in current employment,69,33
+3,Loan Credit amount ,65,28
+4,Family status,62,23
+5,Owns Property,61,27
+6,Income type,56,28
+7,Occupation Type,53,25
+8,Owns Car,48,28
+9,Gender,47,26
+10,Goods Price,44,25
+11,Employer organization,44,27
+12,Highest education level,36,19
+13,Years since changing registration,34,19
+14,Number of children,33,17
+15,Loan annuity,33,15
+16,Years since changing phone,30,17
+17,Years since changing  identity document,28,16
+18,Number of family members,28,14
+19,Has email,22,14
+20,Has Phone,21,14
+21,Application Day,21,15
+22,Housing situation,19,13
+23,Region's Normalized Population,19,12
+24,Application Hour,18,12
+25,Mobile reachable,16,8
+26,Has Employee Phone,12,10
+27,Accompanied while applying,12,11
+28,Has Mobile,11,9
+29,Region & City Rating,10,7
+30,Number of times social circle defaulted on loan for 30 days,9,6
+31,Installments,9,5
+32,Number of Credit Bureau enquiries 1 year before application,8,4
+33,Has Work Phone,6,6
+34,Number of times social circle at default risk for 30 days,6,3
+35,Contact address located in Registration region,6,5
+36,Contact address located in work region,5,4
+37,Region's Rating,4,4
+38,Number of times social circle were at risk to default on loan for 60 days,4,4
+39,Number of Credit Bureau enquiries 1 week before application,3,3
+40,Work address located in Registration region,3,3
+41,Number of Credit Bureau enquiries 1 day before application,3,2
+42,Contact city in work city,3,3
+43,Contact city in Registration city,2,2
+44,Work address in Registration city,2,2
+45,Number of Credit Bureau enquiries 3 month before application,1,1
+46,Number of Credit Bureau enquiries 1 hour before application,1,1

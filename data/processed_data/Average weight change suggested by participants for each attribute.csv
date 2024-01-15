@@ -1,0 +1,48 @@
+,Attribute,No. Part.,Av. Weight. Ch. %
+0,Age,44,-1.5240583554236382
+1,Income,39,7.43713371826041
+2,Years in current employment,33,3.040767948335539
+3,Owns Car,28,4.663051305588878
+4,Loan Credit amount ,28,-11.928756146896509
+5,Income type,28,99.53924591778907
+6,Owns Property,27,119.9562100183829
+7,Employer organization,27,20.848694318514276
+8,Gender,26,inf
+9,Goods Price,25,0.6662943910494694
+10,Occupation Type,25,17.786585532415373
+11,Family status,23,46.9338932764211
+12,Years since changing registration,19,-16.400385443093068
+13,Highest education level,19,24.470362472634186
+14,Number of children,17,142.921814041384
+15,Years since changing phone,17,-43.90608186150547
+16,Years since changing  identity document,16,-33.81476736385568
+17,Application Day,15,-66.22325293753865
+18,Loan annuity,15,31.11206963332423
+19,Has email,14,inf
+20,Number of family members,14,170.80841391349318
+21,Has Phone,14,inf
+22,Housing situation,13,197.1940221940222
+23,Application Hour,12,-37.227628326020465
+24,Region's Normalized Population,12,-29.643890269905327
+25,Accompanied while applying,11,59.614512471655324
+26,Has Employee Phone,10,inf
+27,Has Mobile,9,inf
+28,Mobile reachable,8,inf
+29,Region & City Rating,7,-22.67857142857143
+30,Number of times social circle defaulted on loan for 30 days,6,42.863175878787494
+31,Has Work Phone,6,105.55555555555556
+32,Installments,5,251.32489283708796
+33,Contact address located in Registration region,5,inf
+34,Contact address located in work region,4,inf
+35,Number of times social circle were at risk to default on loan for 60 days,4,376.7857142857143
+36,Region's Rating,4,-20.454545454545446
+37,Number of Credit Bureau enquiries 1 year before application,4,-43.858505000746376
+38,Work address located in Registration region,3,251.6666666666667
+39,Number of Credit Bureau enquiries 1 week before application,3,8.333333333333332
+40,Number of times social circle at default risk for 30 days,3,141.71877505210844
+41,Contact city in work city,3,inf
+42,Contact city in Registration city,2,-57.692307692307686
+43,Work address in Registration city,2,-66.66666666666667
+44,Number of Credit Bureau enquiries 1 day before application,2,48.08612440191389
+45,Number of Credit Bureau enquiries 3 month before application,1,240.0
+46,Number of Credit Bureau enquiries 1 hour before application,1,133.33333333333331

@@ -1,0 +1,2 @@
+serial number,timestamp,user_id,responses
+0,2023-11-10 11:47:59.834055,5f1c55c8ea92af4d99d03137,"[{'question': 1, 'response': [1]}, {'question': 2, 'response': 4}, {'question': 3, 'response': {'selection': 2, 'text': ''}}]"

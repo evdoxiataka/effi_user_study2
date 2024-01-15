@@ -1,0 +1,2 @@
+serial number,timestamp,user_id,responses
+0,2023-11-16 13:09:45.586019,62fb804a737937835d963c8b,"[{'question': 1, 'response': [1, 2]}, {'question': 2, 'response': 4}, {'question': 3, 'response': {'selection': 4, 'text': 'It should not be based on personal characteristics, only relevant financial information. '}}]"
