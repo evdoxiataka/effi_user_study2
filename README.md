@@ -38,7 +38,7 @@ The collected data from the user study and some code for cleaning them can be fo
 ### processed_data
 Various files containing processed data and some code for cleaning them can be found here. Some .csv files are retrieved from https://anonymous.4open.science/r/exploring_impact_of_lay_user_feedback_for_improving_ai_fairness/README.md.
 - **checkingCollectedData.ipynb**: code for cleaning and checking users' feedback
-- **feedback.ipynb**: code to create statistics about participants' interactions with the UI
+- **feedback.ipynb**: code to retrieve participants feedback from logs, clean and preprocess it, and create statistics about participants' interactions with the UI
 - **demographics.ipynb**: code to create statistics about participants' demographics available through Prolific
 - **QuestionnaireInfoInCSV.ipynb**: code to create a single csv containing all participants' responses to questionnaires.
 
@@ -59,3 +59,5 @@ This contains the code for the Analysis. The following notebooks should be run i
 1. **FeedbackIntegration_Training.ipynb**: This notebook contains the code for integrating participants' feedback, retraining the AI Model, and evaluating fairness and accuracy before and after the integration of feedback.  
 2. **FeedbackIntegration_Analysis.ipynb**: This notebook contains the code for analysing the results from the integration of participants' feedback.
 
+### utils
+Various files with python code used for the training and analysis.

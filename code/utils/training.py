@@ -95,6 +95,7 @@ def oneoff_training_evaluation(X_train_original, y_train_original,
     """
         onlyUnfair: Boolean if True take only 'unfair' labelled instances
         method_indicative_fileName_exte: Str
+        fs: Float in [0,1] to define the weight for the instances in training set that come from participants' feedback
     """
     accuracy = []
     group_fairness_metrics = []
@@ -163,7 +164,8 @@ def oneoff_training_evaluation(X_train_original, y_train_original,
     accuracy.append(acc_row)
     group_fairness_metrics.append(group_row)
     indiv_fairness_metrics.append(indv_row)
-    ## prepare results for saving
+    
+    ## SAVE RESULTS
     df_group = None
     df_indiv = None
     df_acc = None
