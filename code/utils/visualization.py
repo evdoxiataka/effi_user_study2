@@ -288,16 +288,21 @@ def perc_change_plots(perc_ch_df, title, file_name, folder, attrs, attrs_codes, 
                 else:
                     fig.delaxes(axes[len(group_fair)-1,len(attrs)-1])
                     continue
-                df = perc_ch_df[['participant_id',fm]].sort_values(by=[fm], ascending=False)                
-                axes[j,i].bar(df['participant_id'], df[fm])
+                df = perc_ch_df[['participant_id',fm,'color']].sort_values(by=[fm], ascending=False)                
+                axes[j,i].bar(df['participant_id'], df[fm], color = df['color'])
                 axes[j,i].set_xlabel("Participants\n in desc. order of perc. ch.")
-                axes[j,i].set_ylabel(fm+code+'\n Perc. Ch. %')
+                axes[j,i].set_ylabel('Perc. Ch. %')
+                axes[j,i].set_title(fm+code) 
                 axes[j,i].xaxis.set_ticklabels([])
             else:
-                df = perc_ch_df[['participant_id',attr+'_'+fm]].sort_values(by=[attr+'_'+fm], ascending=False)
-                axes[j,i].bar(df['participant_id'], df[attr+'_'+fm])#,color=cls,label = labels
+                if fm=='counterfactual':
+                    df = perc_ch_df[['participant_id',fm+'_'+attr,'color']].sort_values(by=[fm+'_'+attr], ascending=False)
+                    axes[j,i].bar(df['participant_id'], df[fm+'_'+attr], color = df['color'])
+                else:
+                    df = perc_ch_df[['participant_id',attr+'_'+fm,'color']].sort_values(by=[attr+'_'+fm], ascending=False)
+                    axes[j,i].bar(df['participant_id'], df[attr+'_'+fm], color = df['color'])#,color=cls,label = labels
                 axes[j,i].set_xlabel("Participants\n in desc. order of perc. ch.")
-                axes[j,i].set_ylabel(group_fair_codes[group_fair.index(fm)]+'\n Perc. Ch. %')
-                axes[j,i].set_title(attrs_codes[i]) 
+                axes[j,i].set_ylabel('Perc. Ch. %')
+                axes[j,i].set_title(group_fair_codes[group_fair.index(fm)]+' on '+attrs_codes[i]) 
                 axes[j,i].xaxis.set_ticklabels([])
     fig.savefig(folder+file_name, dpi=300)

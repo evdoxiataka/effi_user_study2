@@ -3,9 +3,9 @@ import pandas as pd
 from sklearn import metrics
 
 from sklearn.cluster import KMeans
-from sklearn_extra.cluster import KMedoids
-from sklearn.decomposition import PCA
-from sklearn.preprocessing import StandardScaler
+# from sklearn_extra.cluster import KMedoids
+# from sklearn.decomposition import PCA
+# from sklearn.preprocessing import StandardScaler
 
 from sklearn.utils import class_weight
 
@@ -592,8 +592,8 @@ def k_means_optimize_parameter(array_of_vectors, parameters, metric):
     for p in parameters:
         if metric=='mean':
             kmeans_model = KMeans(n_clusters=p, init='k-means++', random_state=13, n_init='auto')
-        elif metric=='median':
-            kmeans_model = KMedoids(n_clusters=p, init='k-medoids++', random_state=13)
+        # elif metric=='median':
+        #     kmeans_model = KMedoids(n_clusters=p, init='k-medoids++', random_state=13)
         kmeans_model.fit(array_of_vectors)          # fit model on dataset, this will find clusters based on parameter p
         ss = metrics.silhouette_score(array_of_vectors, kmeans_model.labels_)   # calculate silhouette_score
         silhouette_scores += [ss]       # store all the scores
@@ -604,23 +604,23 @@ def k_means_optimize_parameter(array_of_vectors, parameters, metric):
             best_grid = p
     return silhouette_scores, best_score, best_grid
 
-def k_means_pca(array_of_vectors, n_clusters, metric, n_components=2):
-    """
-        array_of_vectors: List of lists containing the vectors 
-        n_clusters: Number of clusters for k-means
-        n_components: number of components for PCA
-        metric: Str in {'mean','median'}
-    """
-    if metric=='mean':
-        kmeans_model = KMeans(n_clusters=n_clusters, init='k-means++', random_state=13, n_init='auto')
-    elif metric=='median':
-        kmeans_model = KMedoids(n_clusters=n_clusters, init='k-medoids++', random_state=13)
-    kmeans_model.fit(array_of_vectors)
-    cluster_ids = kmeans_model.labels_
-    cluster_centroids = kmeans_model.cluster_centers_
-    ##
-    pca = PCA(n_components=2)
-    array_of_vectors_standard = StandardScaler().fit_transform(array_of_vectors)
-    pca.fit(array_of_vectors_standard)
-    array_of_vectors_pca = pca.transform(array_of_vectors_standard)
-    return cluster_ids, cluster_centroids, array_of_vectors_pca
+# def k_means_pca(array_of_vectors, n_clusters, metric, n_components=2):
+#     """
+#         array_of_vectors: List of lists containing the vectors 
+#         n_clusters: Number of clusters for k-means
+#         n_components: number of components for PCA
+#         metric: Str in {'mean','median'}
+#     """
+#     if metric=='mean':
+#         kmeans_model = KMeans(n_clusters=n_clusters, init='k-means++', random_state=13, n_init='auto')
+#     # elif metric=='median':
+#     #     kmeans_model = KMedoids(n_clusters=n_clusters, init='k-medoids++', random_state=13)
+#     kmeans_model.fit(array_of_vectors)
+#     cluster_ids = kmeans_model.labels_
+#     cluster_centroids = kmeans_model.cluster_centers_
+#     ##
+#     pca = PCA(n_components=2)
+#     array_of_vectors_standard = StandardScaler().fit_transform(array_of_vectors)
+#     pca.fit(array_of_vectors_standard)
+#     array_of_vectors_pca = pca.transform(array_of_vectors_standard)
+#     return cluster_ids, cluster_centroids, array_of_vectors_pca

@@ -87,6 +87,111 @@ def train_and_evaluate_model(X_train_original, y_train_original,
     i_dict_indv = {'participant_id':[p_id],'iteration':[iteration],'fs':[fs], 'consistency':[consistency], 'counterfactual_CODE_GENDER':[counterfactual_CODE_GENDER], 'counterfactual_AGE':[counterfactual_AGE], 'counterfactual_NAME_FAMILY_STATUS':[counterfactual_NAME_FAMILY_STATUS]}
     return pd.DataFrame(i_dict_acc), pd.DataFrame(i_dict_group), pd.DataFrame(i_dict_indv)
 
+# def oneoff_training_evaluation(X_train_original, y_train_original,
+#                             X_test_original, y_test_original,
+#                             train_df_test_bin, test_df,
+#                             sensitive_attrs, fs, feedback_df,
+#                            onlyUnfair, useFeatureWeights, path, method_indicative_fileName_exte):
+#     """
+#         onlyUnfair: Boolean if True take only 'unfair' labelled instances
+#         method_indicative_fileName_exte: Str
+#         fs: Float in [0,1] to define the weight for the instances in training set that come from participants' feedback
+#     """
+#     accuracy = []
+#     group_fairness_metrics = []
+#     indiv_fairness_metrics = []
+                               
+#     ## BEFORE INTEGRATING ANY FEEDBACK
+#     X_train = X_train_original.copy()
+#     y_train = y_train_original.copy()
+#     X_test = X_test_original.copy()
+#     y_test = y_test_original.copy()
+#     X_test_bin = train_df_test_bin.copy()
+#     acc_row, group_row, indv_row = train_and_evaluate_model(X_train, y_train, X_test, y_test, 
+#                                                              X_test_bin, [],
+#                                                             sensitive_attrs,
+#                                                             0, fs, 0, None)
+#     accuracy.append(acc_row)
+#     group_fairness_metrics.append(group_row)
+#     indiv_fairness_metrics.append(indv_row)
+                               
+#     ## INTEGRATE FEEDBACK
+#     count = 0
+#     feature_weights = np.array([])
+#     for j, p_id in enumerate(feedback_df['ID'].unique()):
+#         print('participant',j)
+#         feedbackInstances_j = feedback_df[feedback_df['ID']== p_id].sort_values(by=['timestamp'])            
+#         for k, idx in enumerate(feedbackInstances_j.index):
+#             ## get application data
+#             app_id = feedback_df['App ID'].loc[idx]        
+#             test_df_app_id = test_df[test_df['SK_ID_CURR'] == app_id].loc[:,test_df.columns!='SK_ID_CURR']
+#             ## get predicted label
+#             pred_label = feedback_df['PredictedDecision'].loc[idx]
+#             if pred_label == 'Accepted':
+#                 pred_label = 1
+#             elif pred_label == 'Rejected':
+#                 pred_label = 0
+#             else:
+#                 pred_label = None
+#             ## flip label if user indicated 'unfair'
+#             feed_label = feedback_df['Attribute'].loc[idx] 
+#             if feed_label == 'unfair':
+#                 if pred_label == 1:
+#                     pred_label = 0
+#                 elif pred_label == 0:
+#                     pred_label = 1
+#             elif onlyUnfair and (feed_label == 'checked'):
+#                 continue    
+#             if useFeatureWeights:
+#                 if len(feedback_df['Value'].loc[idx]) == 0:
+#                     continue
+#                 if len(feature_weights):
+#                     feature_weights = feature_weights+np.array(feedback_df['Value'].loc[idx])
+#                 else:
+#                     feature_weights = np.array(feedback_df['Value'].loc[idx])                    
+#             ##
+#             count = count + 1
+#             X_train = pd.concat([X_train, test_df_app_id], ignore_index=True)
+#             y_train = pd.concat([y_train, pd.DataFrame({'TARGET':[pred_label]})], ignore_index=True)
+#     ## retrain after integrating all feedback
+#     if len(feature_weights)>0:
+#         feature_weights = feature_weights/count
+#         feature_weights = feature_weights/sum(feature_weights)
+#     acc_row, group_row, indv_row = train_and_evaluate_model(X_train, y_train, X_test, y_test, 
+#                                                             X_test_bin, feature_weights,
+#                                                             sensitive_attrs,
+#                                                             count, fs, count, None)
+#     accuracy.append(acc_row)
+#     group_fairness_metrics.append(group_row)
+#     indiv_fairness_metrics.append(indv_row)
+    
+#     ## SAVE RESULTS
+#     df_group = None
+#     df_indiv = None
+#     df_acc = None
+#     for i, i_df in enumerate(group_fairness_metrics):
+#         ## group
+#         if df_group is not None:
+#             df_group = pd.concat([df_group, i_df], ignore_index=True)
+#         else:
+#             df_group = i_df
+#         ## individual
+#         i_df_indv = indiv_fairness_metrics[i]
+#         if df_indiv is not None:
+#             df_indiv = pd.concat([df_indiv, i_df_indv], ignore_index=True)
+#         else:
+#             df_indiv = i_df_indv
+#         ## acc
+#         i_df_acc = accuracy[i]
+#         if df_acc is not None:
+#             df_acc = pd.concat([df_acc, i_df_acc], ignore_index=True)
+#         else:
+#             df_acc = i_df_acc
+#     ## save as csv
+#     df_group.to_csv(path+"group_fairness_"+method_indicative_fileName_exte+".csv", index=False)
+#     df_indiv.to_csv(path+"individual_fairness_"+method_indicative_fileName_exte+".csv", index=False)
+#     df_acc.to_csv(path+"accuracy_"+method_indicative_fileName_exte+".csv", index=False)
+
 def oneoff_training_evaluation(X_train_original, y_train_original,
                             X_test_original, y_test_original,
                             train_df_test_bin, test_df,
@@ -117,6 +222,8 @@ def oneoff_training_evaluation(X_train_original, y_train_original,
                                
     ## INTEGRATE FEEDBACK
     count = 0
+    count_feat = 0
+    count_iter = 0
     feature_weights = np.array([])
     for j, p_id in enumerate(feedback_df['ID'].unique()):
         print('participant',j)
@@ -141,21 +248,26 @@ def oneoff_training_evaluation(X_train_original, y_train_original,
                 elif pred_label == 0:
                     pred_label = 1
             elif onlyUnfair and (feed_label == 'checked'):
-                continue    
+                pred_label = None
+                # continue    
             if useFeatureWeights:
                 if len(feedback_df['Value'].loc[idx]) == 0:
                     continue
+                count_feat = count_feat+1
                 if len(feature_weights):
                     feature_weights = feature_weights+np.array(feedback_df['Value'].loc[idx])
                 else:
                     feature_weights = np.array(feedback_df['Value'].loc[idx])                    
             ##
-            count = count + 1
-            X_train = pd.concat([X_train, test_df_app_id], ignore_index=True)
-            y_train = pd.concat([y_train, pd.DataFrame({'TARGET':[pred_label]})], ignore_index=True)
+            if pred_label!=None:
+                count = count + 1
+                X_train = pd.concat([X_train, test_df_app_id], ignore_index=True)
+                y_train = pd.concat([y_train, pd.DataFrame({'TARGET':[pred_label]})], ignore_index=True)
+            if pred_label!=None or len(feedback_df['Value'].loc[idx])>0:
+                count_iter = count_iter+1
     ## retrain after integrating all feedback
     if len(feature_weights)>0:
-        feature_weights = feature_weights/count
+        feature_weights = feature_weights/count_feat
         feature_weights = feature_weights/sum(feature_weights)
     acc_row, group_row, indv_row = train_and_evaluate_model(X_train, y_train, X_test, y_test, 
                                                             X_test_bin, feature_weights,
@@ -192,6 +304,120 @@ def oneoff_training_evaluation(X_train_original, y_train_original,
     df_indiv.to_csv(path+"individual_fairness_"+method_indicative_fileName_exte+".csv", index=False)
     df_acc.to_csv(path+"accuracy_"+method_indicative_fileName_exte+".csv", index=False)
                                
+# def iml_training_evaluation(X_train_original, y_train_original,
+#                             X_test_original, y_test_original, 
+#                             train_df_test_bin, test_df,
+#                             sensitive_attrs, fs, feedback_df,
+#                            onlyUnfair, useFeatureWeights, folder, method_indicative_fileName_exte):
+#     """
+#         onlyUnfair: Boolean if True take only 'unfair' labelled instances
+#         useFeatureWeights: Boolean if True set feature weights from feedback
+#         method_indicative_fileName_exte: Str
+#     """
+#     accuracy = []
+#     group_fairness_metrics = []
+#     indiv_fairness_metrics = []
+                               
+#     ## BEFORE INTEGRATING FEEDBACK
+#     X_train = X_train_original.copy()
+#     y_train = y_train_original.copy()
+#     X_test = X_test_original.copy()
+#     y_test = y_test_original.copy()
+#     X_test_bin = train_df_test_bin.copy()
+#     acc_row, group_row, indv_row = train_and_evaluate_model(X_train, y_train, X_test, y_test, 
+#                                                              X_test_bin, [],
+#                                                             sensitive_attrs,
+#                                                             0, fs, 0, None)
+#     accuracy.append(acc_row)
+#     group_fairness_metrics.append(group_row)
+#     indiv_fairness_metrics.append(indv_row)
+                               
+#     ## INTEGRATE FEEDBACK 
+#     for j, p_id in enumerate(feedback_df['ID'].unique()):
+#         print('participant',j)
+#         X_train = X_train_original.copy()
+#         y_train = y_train_original.copy()
+#         X_test = X_test_original.copy()
+#         y_test = y_test_original.copy()
+#         X_test_bin = train_df_test_bin.copy()
+#         feedbackInstances_j = feedback_df[feedback_df['ID']== p_id].sort_values(by=['timestamp'])
+#         count = 0
+#         for k, idx in enumerate(feedbackInstances_j.index):
+#             ## get application data
+#             app_id = feedback_df['App ID'].loc[idx]        
+#             test_df_app_id = test_df[test_df['SK_ID_CURR'] == app_id].loc[:,test_df.columns!='SK_ID_CURR']
+#             ## get predicted label
+#             pred_label = feedback_df['PredictedDecision'].loc[idx]
+#             # print(pred_label)
+#             # pred_label = applications_df[applications_df["Application_id"] == app_id]["Predicted_decision"].tolist()[0]
+#             if pred_label == 'Accepted':
+#                 pred_label = 1
+#             elif pred_label == 'Rejected':
+#                 pred_label = 0
+#             else:
+#                 pred_label = None
+#             ## flip label if user indicated 'unfair'
+#             feed_label = feedback_df['Attribute'].loc[idx] 
+#             if feed_label == 'unfair':
+#                 if pred_label == 1:
+#                     pred_label = 0
+#                 elif pred_label == 0:
+#                     pred_label = 1
+#             elif onlyUnfair and (feed_label == 'checked'):
+#                 continue
+#             feature_weights = []
+#             if useFeatureWeights:
+#                 feature_weights = feedback_df['Value'].loc[idx]
+#                 if feature_weights == []:
+#                     continue
+#             ##
+#             count = count + 1
+#             X_train = pd.concat([X_train, test_df_app_id], ignore_index=True)
+#             y_train = pd.concat([y_train, pd.DataFrame({'TARGET':[pred_label]})], ignore_index=True)
+#             acc_row, group_row, indv_row = train_and_evaluate_model(X_train, y_train, X_test, y_test, 
+#                                                                     X_test_bin, feature_weights,
+#                                                                     sensitive_attrs,
+#                                                                     count, fs, count-1, p_id)
+#             # print("iteration: ",count,"p_id: ",p_id,"time: ", timer()-start)
+#             accuracy.append(acc_row)
+#             group_fairness_metrics.append(group_row)
+#             indiv_fairness_metrics.append(indv_row)
+#     ## prepare results for saving
+#     df_group = None
+#     df_indiv = None
+#     df_acc = None
+#     for i, i_df in enumerate(group_fairness_metrics):
+#         ## group
+#         if df_group is not None:
+#             df_group = pd.concat([df_group, i_df], ignore_index=True)
+#         else:
+#             df_group = i_df
+#         ## individual
+#         i_df_indv = indiv_fairness_metrics[i]
+#         if df_indiv is not None:
+#             df_indiv = pd.concat([df_indiv, i_df_indv], ignore_index=True)
+#         else:
+#             df_indiv = i_df_indv
+#         ## acc
+#         i_df_acc = accuracy[i]
+#         if df_acc is not None:
+#             df_acc = pd.concat([df_acc, i_df_acc], ignore_index=True)
+#         else:
+#             df_acc = i_df_acc
+#     ## save as csv
+#     df_group.to_csv(folder+"group_fairness_"+method_indicative_fileName_exte+".csv", index=False)
+#     df_indiv.to_csv(folder+"individual_fairness_"+method_indicative_fileName_exte+".csv", index=False)
+#     df_acc.to_csv(folder+"accuracy_"+method_indicative_fileName_exte+".csv", index=False)
+#     ## add cumulative moving average lines data
+#     add_cma_data(df_group, ['DemographicParityRatio','AverageOddsDifference'], df_indiv, ['consistency',
+#                                                                                       'counterfactual_CODE_GENDER',
+#                                                                                       'counterfactual_AGE',
+#                                                                                       'counterfactual_NAME_FAMILY_STATUS'], 
+#                  df_acc, sensitive_attrs, fs)
+#     df_group.to_csv(folder+"group_fairness_"+method_indicative_fileName_exte+"_with_cma.csv", index=False)
+#     df_indiv.to_csv(folder+"individual_fairness_"+method_indicative_fileName_exte+"_with_cma.csv", index=False)
+#     df_acc.to_csv(folder+"accuracy_"+method_indicative_fileName_exte+"_with_cma.csv", index=False)
+
 def iml_training_evaluation(X_train_original, y_train_original,
                             X_test_original, y_test_original, 
                             train_df_test_bin, test_df,
@@ -230,6 +456,7 @@ def iml_training_evaluation(X_train_original, y_train_original,
         X_test_bin = train_df_test_bin.copy()
         feedbackInstances_j = feedback_df[feedback_df['ID']== p_id].sort_values(by=['timestamp'])
         count = 0
+        count_iter = 0
         for k, idx in enumerate(feedbackInstances_j.index):
             ## get application data
             app_id = feedback_df['App ID'].loc[idx]        
@@ -252,20 +479,25 @@ def iml_training_evaluation(X_train_original, y_train_original,
                 elif pred_label == 0:
                     pred_label = 1
             elif onlyUnfair and (feed_label == 'checked'):
-                continue
+                pred_label = None
+                # continue
             feature_weights = []
             if useFeatureWeights:
                 feature_weights = feedback_df['Value'].loc[idx]
                 if feature_weights == []:
                     continue
             ##
-            count = count + 1
-            X_train = pd.concat([X_train, test_df_app_id], ignore_index=True)
-            y_train = pd.concat([y_train, pd.DataFrame({'TARGET':[pred_label]})], ignore_index=True)
+            if pred_label!=None:
+                count = count + 1
+                X_train = pd.concat([X_train, test_df_app_id], ignore_index=True)
+                y_train = pd.concat([y_train, pd.DataFrame({'TARGET':[pred_label]})], ignore_index=True)
+            if pred_label==None and len(feature_weights)==0:
+                continue
+            count_iter = count_iter+1
             acc_row, group_row, indv_row = train_and_evaluate_model(X_train, y_train, X_test, y_test, 
                                                                     X_test_bin, feature_weights,
                                                                     sensitive_attrs,
-                                                                    count, fs, count-1, p_id)
+                                                                    count, fs, count_iter-1, p_id)
             # print("iteration: ",count,"p_id: ",p_id,"time: ", timer()-start)
             accuracy.append(acc_row)
             group_fairness_metrics.append(group_row)
