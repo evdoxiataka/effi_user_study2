@@ -1,5 +1,5 @@
-# Human-in-the-loop AI Fairness: Stakeholders Auditing and Fixing Issues Through Interactive Machine Learning
-This repository constitutes a supplementary material for the paper "Human-in-the-loop AI Fairness: Stakeholders Auditing and Fixing Issues Through Interactive Machine Learning" submitted to FAccT-24.
+# Human-in-the-loop Fairness: Integrating Stakeholder Feedback to Incorporate Fairness Perspectives in Responsible AI - USER STUDY 2
+This repository constitutes a supplementary material for the paper "Human-in-the-loop Fairness: Integrating Stakeholder Feedback to Incorporate Fairness Perspectives in Responsible AI" submitted to ACM TIST.
 
 It contains the:
 
@@ -36,7 +36,7 @@ The collected data from the user study and some code for cleaning them can be fo
         - SELECT\_ATTRIBUTES\_Fairness\_Metrics: Select an attribute to show in Fairness Metrics Table
 
 ### processed_data
-Various files containing processed data and some code for cleaning them can be found here. Some .csv files are retrieved from https://anonymous.4open.science/r/exploring_impact_of_lay_user_feedback_for_improving_ai_fairness/README.md.
+Various files containing processed data and some code for cleaning them can be found here. Some .csv files are retrieved from https://github.com/evdoxiataka/effi_user_study1/README.md.
 - **checkingCollectedData.ipynb**: code for cleaning and checking users' feedback
 - **feedback.ipynb**: code to retrieve participants feedback from logs, clean and preprocess it, and create statistics about participants' interactions with the UI
 - **demographics.ipynb**: code to create statistics about participants' demographics available through Prolific
