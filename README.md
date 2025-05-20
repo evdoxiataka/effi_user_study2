@@ -1,5 +1,5 @@
 # Human-in-the-loop Fairness: Integrating Stakeholder Feedback to Incorporate Fairness Perspectives in Responsible AI - USER STUDY 2
-This repository constitutes a supplementary material for the paper "Human-in-the-loop Fairness: Integrating Stakeholder Feedback to Incorporate Fairness Perspectives in Responsible AI" submitted to ACM TIST.
+This repository constitutes a supplementary material for the paper "Human-in-the-loop Fairness: Integrating Stakeholder Feedback to Incorporate Fairness Perspectives in Responsible AI".
 
 It contains the:
 
