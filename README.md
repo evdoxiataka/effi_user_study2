@@ -52,6 +52,7 @@ The folder "code" contains 3 folders:
 Code for the AI model can be found here.
 
 1. **AI_Model_Training.ipynb**: This notebook contains the code for training the AI Model based on the preprocessed data and predicting the outcome of the test set (i.e., the 100 loan applications shown to participants through the UI).
+5. **EvaluationTestSetInfo.ipynb**: This notebook contains information (calculation of base rates) about the test data used to evaluate the models.
 
 ### analysis
 This contains the code for the Analysis. The following notebooks should be run in the provided order.
