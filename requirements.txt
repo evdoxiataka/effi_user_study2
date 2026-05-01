@@ -1,0 +1,7 @@
+conda install python=3.11.4
+conda install -c anaconda py-xgboost=2.1.0
+conda install -c conda-forge fairlearn=0.8.0
+pip install aif360==0.5.0
+conda install -c conda-forge jupyterlab
+conda install -c conda-forge scikit-learn-extra
+pip install pandas==2.0.3
