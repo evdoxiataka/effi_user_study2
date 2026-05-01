@@ -503,19 +503,20 @@ def get_percentage_change_oneoff(df_group, group_fair, df_indiv, indiv_fair, df_
             perc_change_dict[idf] = ((df[idf].tolist()[0]-baseline)/abs(baseline))*100
         else:
             perc_change_dict[idf] = np.inf
-    ## ACCURACT
-    ## get baseline value
-    df_i_0 = df_acc[df_acc['iteration']==0]
-    df = df_i_0[df_i_0['fs']==fs]                
-    baseline = df['accuracy'].tolist()[0]
-    ## get diff from baseline
-    df_i_non0 = df_acc[df_acc['iteration']!=0]
-    df = df_i_non0[df_i_non0['fs']==fs]
-    # av_diff_vec.append(((df['accuracy'].tolist()[0]-baseline)/baseline)*100)
-    if baseline:
-        perc_change_dict['accuracy'] = ((df['accuracy'].tolist()[0]-baseline)/abs(baseline))*100
-    else:
-        perc_change_dict['accuracy'] = np.inf
+    ## ACCURACY - F1
+    for acc_metric in ['accuracy','F1_accepted','F1_rejected','F1_average']:
+        ## get baseline value
+        df_i_0 = df_acc[df_acc['iteration']==0]
+        df = df_i_0[df_i_0['fs']==fs]                
+        baseline = df[acc_metric].tolist()[0]
+        ## get diff from baseline
+        df_i_non0 = df_acc[df_acc['iteration']!=0]
+        df = df_i_non0[df_i_non0['fs']==fs]
+        # av_diff_vec.append(((df['accuracy'].tolist()[0]-baseline)/baseline)*100)
+        if baseline:
+            perc_change_dict[acc_metric] = ((df[acc_metric].tolist()[0]-baseline)/abs(baseline))*100
+        else:
+            perc_change_dict[acc_metric] = np.inf
     return pd.DataFrame([perc_change_dict])
 
 def get_percentage_change_IML(df_group, group_fair, df_indiv, indiv_fair, sensitive_attrs, fs):
